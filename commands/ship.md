@@ -1,6 +1,6 @@
 ---
 allowed-tools: "Bash(git add:*), Bash(git status:*), Bash(git diff:*), Bash(git commit:*), Bash(git push:*), Bash(git log:*)"
-description: Commit changes and push to remote. Usage: /ship [all] [--force] | /ship dry
+description: "Commit changes and push to remote. Usage: /ship [all] [--force] | /ship dry"
 ---
 
 Commit changes and push to remote.
