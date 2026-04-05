@@ -1,27 +1,27 @@
 ---
 allowed-tools: Bash(git add:*), Bash(git status:*), Bash(git diff:*), Bash(git commit:*), Bash(git push:*)
-description: Commit changes and push to remote. Usage: /ship <all|staged> [message]
+description: Commit changes and push to remote. Usage: /ship <all|staged|dry> [message]
 ---
 
 Commit changes and push to remote.
 
-Usage: `/ship <all|staged> [message]`
+Usage: `/ship <all|staged|dry> [message]`
 
 Parse `$ARGUMENTS`:
-- First word is the required mode: `all` or `staged`
+- First word is the required mode: `all`, `staged`, or `dry`
 - Remaining words (if any) are the commit message to use directly
-- If mode is missing or not one of the two values, stop and tell the user: "Usage: /ship <all|staged> [message]"
+- If mode is missing or not one of the three values, stop and tell the user: "Usage: /ship <all|staged|dry> [message]"
 
 Steps:
 1. Run `git status` to see what's changed
 2. **If mode is `all`:** run `git add -A` to stage everything  
-   **If mode is `staged`:** skip — commit only what is already staged
+   **If mode is `staged` or `dry`:** skip — use only what is already staged
 3. Run `git diff --staged` to understand what was done — if the output is empty, stop and tell the user: "Nothing to commit"
 4. Determine commit message:
    - If a message was provided in arguments, use it directly
    - Otherwise derive a concise message from the diff
-5. Run `git commit -m "<message>"`
-6. Run `git push -u origin HEAD`
+5. **If mode is `dry`:** print the diff summary and the proposed commit message, then stop — do not commit or push  
+   **Otherwise:** run `git commit -m "<message>"` then `git push -u origin HEAD`
 
 Commit message rules:
 - Use imperative mood ("Add feature" not "Added feature")
