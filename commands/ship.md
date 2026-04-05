@@ -14,14 +14,14 @@ Parse `$ARGUMENTS`:
 
 Steps:
 1. Run `git status` to see what's changed
-2. Run `git diff --staged` and `git diff` to understand what was done
-3. **If mode is `all`:** run `git add -A` to stage everything  
+2. **If mode is `all`:** run `git add -A` to stage everything  
    **If mode is `staged`:** skip — commit only what is already staged
+3. Run `git diff --staged` to understand what was done — if the output is empty, stop and tell the user: "Nothing to commit"
 4. Determine commit message:
    - If a message was provided in arguments, use it directly
    - Otherwise derive a concise message from the diff
 5. Run `git commit -m "<message>"`
-6. Run `git push`
+6. Run `git push -u origin HEAD`
 
 Commit message rules:
 - Use imperative mood ("Add feature" not "Added feature")
