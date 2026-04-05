@@ -7,6 +7,11 @@ Commit changes and push to remote.
 
 Usage: `/ship <all|staged|dry> [message]`
 
+Modes:
+- `all` — stage everything and commit
+- `staged` — commit only what is already staged
+- `dry` — preview what would be committed (only already-staged changes) and the proposed message, without committing or pushing
+
 Parse `$ARGUMENTS`:
 - First word is the required mode: `all`, `staged`, or `dry`
 - Remaining words (if any) are the commit message to use directly
