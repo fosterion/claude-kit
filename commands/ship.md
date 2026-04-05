@@ -1,15 +1,25 @@
 ---
 allowed-tools: Bash(git add:*), Bash(git status:*), Bash(git diff:*), Bash(git commit:*), Bash(git push:*)
-description: Commit all changes and push to remote
+description: Commit changes and push to remote. Usage: /ship <all|staged> [message]
 ---
 
-Commit all staged and unstaged changes and push to remote.
+Commit changes and push to remote.
+
+Usage: `/ship <all|staged> [message]`
+
+Parse `$ARGUMENTS`:
+- First word is the required mode: `all` or `staged`
+- Remaining words (if any) are the commit message to use directly
+- If mode is missing or not one of the two values, stop and tell the user: "Usage: /ship <all|staged> [message]"
 
 Steps:
 1. Run `git status` to see what's changed
 2. Run `git diff --staged` and `git diff` to understand what was done
-3. Run `git add -A` to stage everything
-4. Write a concise commit message based purely on the diff. If `$ARGUMENTS` is provided, use it as the commit message directly.
+3. **If mode is `all`:** run `git add -A` to stage everything  
+   **If mode is `staged`:** skip — commit only what is already staged
+4. Determine commit message:
+   - If a message was provided in arguments, use it directly
+   - Otherwise derive a concise message from the diff
 5. Run `git commit -m "<message>"`
 6. Run `git push`
 
