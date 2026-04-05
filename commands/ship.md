@@ -1,30 +1,30 @@
 ---
 allowed-tools: "Bash(git add:*), Bash(git status:*), Bash(git diff:*), Bash(git commit:*), Bash(git push:*), Bash(git log:*)"
-description: "Commit changes and push to remote. Usage: /ship [all] [--force] | /ship dry"
+description: "Commit changes and push to remote. Usage: /ship [all] [--yes] | /ship dry"
 ---
 
 Commit changes and push to remote.
 
 Usage:
 - `/ship` — commit staged changes
-- `/ship --force` — commit staged changes, bypass main/master guard
+- `/ship --yes` — commit staged changes, bypass main/master guard
 - `/ship all` — stage everything and commit
-- `/ship all --force` — stage everything and commit, bypass main/master guard
+- `/ship all --yes` — stage everything and commit, bypass main/master guard
 - `/ship dry` — preview what is staged and the proposed message, without committing or pushing. To preview all changes, stage them first with `git add -A`
 
 Parse `$ARGUMENTS`:
-- If `dry` is present, mode=dry (no other arguments allowed alongside it)
+- If `dry` is present, mode=dry; any other argument alongside it is an error — stop and tell the user: "Usage: /ship [all] [--yes] | /ship dry"
 - If `all` is present, mode=all; otherwise mode=staged
-- If `--force` is present, set force=true
-- Any other value is an error — stop and tell the user: "Usage: /ship [all] [--force] | /ship dry"
+- If `--yes` is present, set force=true
+- Any other value is an error — stop and tell the user: "Usage: /ship [all] [--yes] | /ship dry"
 
 Steps:
-1. Run `git status` to see what's changed. If mode is not `dry`: check the current branch name — if it is `main` or `master` and force=false, stop and print: "Refusing to push directly to main/master. Run with --force to override."
+1. Run `git status` to see what's changed. If mode is not `dry`: check the current branch name — if it is `main` or `master` and force=false, stop and print: "Refusing to push directly to main/master. Run with --yes to override."
 2. **If mode is `all`:** run `git add -A` to stage everything  
    **If mode is `staged` or `dry`:** skip — use only what is already staged
 3. Run `git diff --staged` to understand what was done — if the output is empty, stop and tell the user: "Nothing to commit"
-4. Run `git log --oneline -5` to see recent commit style, then derive a concise message from the diff that matches that style
-5. **If mode is `dry`:** print the diff summary and the proposed commit message, then stop — do not commit or push  
+4. Run `git log --oneline -5` to see recent commit style. If the output is empty (no commits yet), skip style matching and use standard imperative mood. Derive a concise message from the diff.
+5. **If mode is `dry`:** print the diff summary and the proposed commit message, then print: "Run `/ship` (or `/ship all`) to commit." Stop — do not commit or push.  
    **Otherwise:** run `git commit -m "<message>"` then `git push -u origin HEAD`
 
 Commit message rules:
