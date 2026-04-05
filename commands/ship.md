@@ -19,7 +19,7 @@ Steps:
 3. Run `git diff --staged` to understand what was done — if the output is empty, stop and tell the user: "Nothing to commit"
 4. Determine commit message:
    - If a message was provided in arguments, use it directly
-   - Otherwise derive a concise message from the diff
+   - Otherwise run `git log --oneline -5` to see recent commit style, then derive a concise message from the diff that matches that style
 5. **If mode is `dry`:** print the diff summary and the proposed commit message, then stop — do not commit or push  
    **Otherwise:** run `git commit -m "<message>"` then `git push -u origin HEAD`
 
