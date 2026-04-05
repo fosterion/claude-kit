@@ -14,11 +14,12 @@ Modes:
 
 Parse `$ARGUMENTS`:
 - First word is the required mode: `all`, `staged`, or `dry`
+- If `--force` is present anywhere in the remaining words, set force=true and remove it from the word list
 - Remaining words (if any) are the commit message to use directly
 - If mode is missing or not one of the three values, stop and tell the user: "Usage: /ship <all|staged|dry> [message]"
 
 Steps:
-1. Run `git status` to see what's changed. Check the current branch name — if it is `main` or `master`, print a warning: "You are about to push directly to main/master. Type 'yes' to confirm." Then wait for user input — proceed only if the response is `yes` or `y`, otherwise stop.
+1. Run `git status` to see what's changed. Check the current branch name — if it is `main` or `master` and force=false, stop and print: "Refusing to push directly to main/master. Run with --force to override." If force=true, skip this check.
 2. **If mode is `all`:** run `git add -A` to stage everything  
    **If mode is `staged` or `dry`:** skip — use only what is already staged
 3. Run `git diff --staged` to understand what was done — if the output is empty, stop and tell the user: "Nothing to commit"
