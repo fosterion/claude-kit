@@ -1,25 +1,25 @@
 ---
 allowed-tools: "Bash(git add:*), Bash(git status:*), Bash(git diff:*), Bash(git commit:*), Bash(git push:*), Bash(git log:*)"
-description: "Commit changes and push to remote. Usage: /ship [all] [--yes] | /ship dry"
+description: "Commit changes and push to remote. Usage: /ship [all] [-y] | /ship dry"
 ---
 
 Commit changes and push to remote.
 
 Usage:
 - `/ship` — commit staged changes
-- `/ship --yes` — commit staged changes, bypass main/master guard
+- `/ship -y` — commit staged changes, bypass main/master guard
 - `/ship all` — stage everything and commit
-- `/ship all --yes` — stage everything and commit, bypass main/master guard
+- `/ship all -y` — stage everything and commit, bypass main/master guard
 - `/ship dry` — preview what is staged and the proposed message, without committing or pushing. To preview all changes, stage them first with `git add -A`
 
 Parse `$ARGUMENTS`:
-- If `dry` is present, mode=dry; any other argument alongside it is an error — stop and tell the user: "Usage: /ship [all] [--yes] | /ship dry"
+- If `dry` is present, mode=dry; any other argument alongside it is an error — stop and tell the user: "Usage: /ship [all] [-y] | /ship dry"
 - If `all` is present, mode=all; otherwise mode=staged
-- If `--yes` is present, set force=true
-- Any other value is an error — stop and tell the user: "Usage: /ship [all] [--yes] | /ship dry"
+- If `-y` is present, set force=true
+- Any other value is an error — stop and tell the user: "Usage: /ship [all] [-y] | /ship dry"
 
 Steps:
-1. Run `git status` to see what's changed. If mode is not `dry`: check the current branch name — if it is `main` or `master` and force=false, stop and print: "Refusing to push directly to main/master. Run with --yes to override."
+1. Run `git status` to see what's changed. If mode is not `dry`: check the current branch name — if it is `main` or `master` and force=false, stop and print: "Refusing to push directly to main/master. Run with -y to override."
 2. **If mode is `all`:** run `git add -A` to stage everything  
    **If mode is `staged` or `dry`:** skip — use only what is already staged
 3. Run `git diff --staged` to understand what was done — if the output is empty, stop and tell the user: "Nothing to commit"
